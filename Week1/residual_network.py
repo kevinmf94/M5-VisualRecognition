@@ -75,7 +75,7 @@ class Net(nn.Module):
         self.avgPool = nn.AvgPool2d(2)
         self.inputsFc1 = 10 * 64 * 64
         self.fc1 = nn.Linear(self.inputsFc1, 8)
-        self.softmax = nn.Softmax(dim=8)
+        self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         x = self.unitRest1.forward(x)
@@ -107,6 +107,7 @@ optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 if ENABLE_GPU:
     print("GPU loaded: " + str(torch.cuda.is_available()))
 
+print("Start traininig")
 for epoch in range(EPOCHS):  # loop over the dataset multiple times
 
     running_loss = 0.0
