@@ -1,8 +1,8 @@
 # M5 - Visual Recognition
 
-Eudald Ballescà (Correo)
-Daniel Yuste (Correo)
-Kevin Martín (Correo)
+Eudald Ballescà (Correo)\
+Daniel Yuste (Correo)\
+Kevin Martín (kevinmf94@gmail.com)
 
-Report:
-https://es.overleaf.com/read/ggbnhqffgdkx
+Overleaf Report:\
+`https://es.overleaf.com/read/ggbnhqffgdkx`
