@@ -4,33 +4,44 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import transforms, datasets
 
-# Dataset
-DATASET_TRAIN = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/train/'
-# DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
+# Constants
+ENABLE_GPU = True
+# DATASET_TRAIN = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/train/'
+# DATASET_TEST = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/test/'
+DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
 DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
-EPOCHS = 300
+EPOCHS = 5
 batch_size = 100
 img_width = 128
 img_height = 128
 
-# Dataset load
-transform = transforms.Compose([
+# Set GPU
+if ENABLE_GPU:
+    torch.cuda.set_device(device=0)
+
+# Dataset transform (Resize image to 128x128 + Convert ToTensor)
+transform = transforms.Compose({
     transforms.Resize((img_height, img_width)),
     transforms.ToTensor()
-])
-dataset = datasets.ImageFolder(DATASET_TRAIN, transform=transform)
-dataloader = torch.utils.data.DataLoader(dataset, batch_size=int(len(dataset) / batch_size), shuffle=True)
+})
+
+# Load train and test datasets.
+trainDataset = datasets.ImageFolder(DATASET_TRAIN, transform=transform)
+trainLoader = torch.utils.data.DataLoader(trainDataset, batch_size=int(len(trainDataset) / batch_size), shuffle=True)
+
+testDataset = datasets.ImageFolder(DATASET_TEST, transform=transform)
+testLoader = torch.utils.data.DataLoader(testDataset, shuffle=True)
 
 
 # Define Model
 class UnitRestNet(nn.Module):
 
-    def __init__(self, filtersFirst, filters, kernel=3, pool=False):
+    def __init__(self, input_dim, filters, kernel=3, pool=False):
         super(UnitRestNet, self).__init__()
 
-        self.isPool = pool;
+        self.isPool = pool
 
-        self.conv1 = nn.Conv2d(filtersFirst, filters, kernel, 1, 1)
+        self.conv1 = nn.Conv2d(input_dim, filters, kernel, 1, 1)
         self.maxPool = nn.MaxPool2d(2)
         self.conv2 = nn.Conv2d(filters, filters, 1, 2, 0)
         self.batchNorm1 = nn.BatchNorm2d(filters)
@@ -62,8 +73,9 @@ class Net(nn.Module):
         print(self.unitRest1)
         self.unitRest2 = UnitRestNet(8, 10, 3)
         self.avgPool = nn.AvgPool2d(2)
-        self.inputsFc1 = 10 * 64 * 64;
+        self.inputsFc1 = 10 * 64 * 64
         self.fc1 = nn.Linear(self.inputsFc1, 8)
+        self.softmax = nn.Softmax(dim=8)
 
     def forward(self, x):
         x = self.unitRest1.forward(x)
@@ -76,18 +88,29 @@ class Net(nn.Module):
 
         x = x.view(-1, self.inputsFc1)
         x = self.fc1(x)
+        x = self.softmax(x)
         return x
 
 
 net = Net()
 print(net)
+
+# Convert Model to CUDA version
+if ENABLE_GPU:
+    net = net.cuda()
+
+# Criterion and optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+
+# Training
+if ENABLE_GPU:
+    print("GPU loaded: " + str(torch.cuda.is_available()))
 
 for epoch in range(EPOCHS):  # loop over the dataset multiple times
 
     running_loss = 0.0
-    for i, data in enumerate(dataloader, 0):
+    for i, data in enumerate(trainLoader, 0):
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
 
@@ -110,3 +133,15 @@ for epoch in range(EPOCHS):  # loop over the dataset multiple times
 print('Finished Training')
 
 # Train Model
+print("Testing model ")
+correct = 0
+total = 0
+with torch.no_grad():
+    for data in testLoader:
+        images, labels = data
+        outputs = net(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+print('Accuracy %d %%' % (100 * correct / total))
