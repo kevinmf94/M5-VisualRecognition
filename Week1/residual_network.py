@@ -12,7 +12,7 @@ GPU_ID = 0
 DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
 DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
 EPOCHS = 50
-batch_size = 100
+batch_size = 200
 img_width = 32
 img_height = 32
 
