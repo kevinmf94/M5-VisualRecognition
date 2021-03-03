@@ -5,12 +5,12 @@ import torch.nn.functional as F
 from torchvision import transforms, datasets
 
 # Constants
-ENABLE_GPU = False
+ENABLE_GPU = True
 GPU_ID = 0
-DATASET_TRAIN = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/train/'
-DATASET_TEST = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/test/'
-#DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
-#DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
+#DATASET_TRAIN = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/train/'
+#DATASET_TEST = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/test/'
+DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
+DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
 EPOCHS = 50
 batch_size = 100
 img_width = 32
