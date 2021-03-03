@@ -6,18 +6,19 @@ from torchvision import transforms, datasets
 
 # Constants
 ENABLE_GPU = True
+GPU_ID = 0
 # DATASET_TRAIN = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/train/'
 # DATASET_TEST = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/test/'
 DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
 DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
-EPOCHS = 5
+EPOCHS = 50
 batch_size = 100
 img_width = 128
 img_height = 128
 
 # Set GPU
 if ENABLE_GPU:
-    torch.cuda.set_device(device=0)
+    torch.cuda.set_device(device=GPU_ID)
 
 # Dataset transform (Resize image to 128x128 + Convert ToTensor)
 transform = transforms.Compose({
@@ -70,7 +71,6 @@ class Net(nn.Module):
         super(Net, self).__init__()
 
         self.unitRest1 = UnitRestNet(3, 8, 3)
-        print(self.unitRest1)
         self.unitRest2 = UnitRestNet(8, 10, 3)
         self.avgPool = nn.AvgPool2d(2)
         self.inputsFc1 = 10 * 64 * 64
@@ -79,10 +79,10 @@ class Net(nn.Module):
 
     def forward(self, x):
         x = self.unitRest1.forward(x)
-        x = F.dropout2d(x, 0.5)
+        x = F.dropout2d(x, 0.25)
 
         x = self.unitRest2.forward(x)
-        x = F.dropout2d(x, 0.5)
+        x = F.dropout2d(x, 0.25)
 
         x = self.avgPool(x)
 
@@ -93,7 +93,7 @@ class Net(nn.Module):
 
 
 net = Net()
-print(net)
+print(net, flush=True)
 
 # Convert Model to CUDA version
 if ENABLE_GPU:
@@ -101,19 +101,22 @@ if ENABLE_GPU:
 
 # Criterion and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0)
 
 # Training
 if ENABLE_GPU:
-    print("GPU loaded: " + str(torch.cuda.is_available()))
+    print("GPU loaded: " + str(torch.cuda.is_available()), flush=True)
 
-print("Start traininig")
+print("Start traininig", flush=True)
 for epoch in range(EPOCHS):  # loop over the dataset multiple times
 
     running_loss = 0.0
     for i, data in enumerate(trainLoader, 0):
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
+
+        if ENABLE_GPU:
+            inputs, labels = inputs.cuda(), labels.cuda()
 
         # zero the parameter gradients
         optimizer.zero_grad()
@@ -128,21 +131,25 @@ for epoch in range(EPOCHS):  # loop over the dataset multiple times
         running_loss += loss.item()
         if i % 25 == 24:  # print every 2000 mini-batches
             print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / batch_size))
+                  (epoch + 1, i + 1, running_loss / batch_size), flush=True)
             running_loss = 0.0
 
-print('Finished Training')
+print('Finished Training', flush=True)
 
 # Train Model
-print("Testing model ")
+print("Testing model ", flush=True)
 correct = 0
 total = 0
 with torch.no_grad():
     for data in testLoader:
         images, labels = data
+
+        if ENABLE_GPU:
+            images, labels = images.cuda(), labels.cuda()
+
         outputs = net(images)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-print('Accuracy %d %%' % (100 * correct / total))
+print('Accuracy %d %%' % (100 * correct / total), flush=True)
