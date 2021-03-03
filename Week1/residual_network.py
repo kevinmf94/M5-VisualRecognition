@@ -5,16 +5,16 @@ import torch.nn.functional as F
 from torchvision import transforms, datasets
 
 # Constants
-ENABLE_GPU = True
+ENABLE_GPU = False
 GPU_ID = 0
-# DATASET_TRAIN = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/train/'
-# DATASET_TEST = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/test/'
-DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
-DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
+DATASET_TRAIN = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/train/'
+DATASET_TEST = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/test/'
+#DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
+#DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
 EPOCHS = 50
 batch_size = 100
-img_width = 128
-img_height = 128
+img_width = 32
+img_height = 32
 
 # Set GPU
 if ENABLE_GPU:
@@ -63,6 +63,7 @@ class UnitRestNet(nn.Module):
         x = F.relu(self.batchNorm2(x))
         x = self.conv4(x)
         x = torch.add(res, x)
+
         return x
 
 
@@ -72,21 +73,26 @@ class Net(nn.Module):
 
         self.unitRest1 = UnitRestNet(3, 8, 3)
         self.unitRest2 = UnitRestNet(8, 10, 3)
-        self.avgPool = nn.AvgPool2d(2)
-        self.inputsFc1 = 10 * 64 * 64
+        self.batchNorm2 = nn.BatchNorm2d(10)
+        self.avgPool = nn.AvgPool2d(4)
+        self.inputsFc1 = 10 * (img_width//4) * (img_height//4)
         self.fc1 = nn.Linear(self.inputsFc1, 8)
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         x = self.unitRest1.forward(x)
-        x = F.dropout2d(x, 0.25)
+        x = F.dropout2d(x, 0.5)
 
         x = self.unitRest2.forward(x)
-        x = F.dropout2d(x, 0.25)
+        x = F.dropout2d(x, 0.5)
 
+        x = F.relu(self.batchNorm2(x))
+        x = F.dropout2d(x, 0.5)
         x = self.avgPool(x)
 
         x = x.view(-1, self.inputsFc1)
+
+        x = F.dropout2d(x, 0.5)
         x = self.fc1(x)
         x = self.softmax(x)
         return x
@@ -101,7 +107,8 @@ if ENABLE_GPU:
 
 # Criterion and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0)
+optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0)
+print(sum(p.numel() for p in net.parameters() if p.requires_grad))
 
 # Training
 if ENABLE_GPU:
