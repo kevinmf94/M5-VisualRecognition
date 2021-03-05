@@ -16,7 +16,7 @@ GPU_ID = 0
 #DATASET_TEST = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/test/'
 DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
 DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
-EPOCHS = 50
+EPOCHS = 300
 batch_size = 200
 img_width = 32
 img_height = 32
@@ -42,14 +42,11 @@ testLoader = torch.utils.data.DataLoader(testDataset, shuffle=True)
 # Define Model
 class UnitRestNet(nn.Module):
 
-    def __init__(self, input_dim, filters, kernel=3, pool=False):
+    def __init__(self, input_dim, filters, kernel=3):
         super(UnitRestNet, self).__init__()
 
-        self.isPool = pool
-
         self.conv1 = nn.Conv2d(input_dim, filters, kernel, 1, 1)
-        self.maxPool = nn.MaxPool2d(2)
-        self.conv2 = nn.Conv2d(filters, filters, 1, 2, 0)
+        self.relu = nn.ReLU()
         self.batchNorm1 = nn.BatchNorm2d(filters)
         self.conv3 = nn.Conv2d(filters, filters, kernel, 1, 1)
         self.batchNorm2 = nn.BatchNorm2d(filters)
@@ -58,9 +55,11 @@ class UnitRestNet(nn.Module):
     def forward(self, x):
         x = self.conv1(x)
         res = x
-        x = F.relu(self.batchNorm1(x))
+        x = self.batchNorm1(x)
+        x = self.relu(x)
         x = self.conv3(x)
-        x = F.relu(self.batchNorm2(x))
+        x = self.batchNorm2(x)
+        x = self.relu(x)
         x = self.conv4(x)
         x = torch.add(res, x)
         return x
@@ -73,25 +72,27 @@ class Net(nn.Module):
         self.unitRest1 = UnitRestNet(3, 8, 3)
         self.unitRest2 = UnitRestNet(8, 10, 3)
         self.batchNorm2 = nn.BatchNorm2d(10)
-        self.avgPool = nn.AvgPool2d(4)
+        self.avgPool = nn.AvgPool2d(4, stride=None)
+        self.relu = nn.ReLU()
         self.inputsFc1 = 10 * (img_width//4) * (img_height//4)
         self.fc1 = nn.Linear(self.inputsFc1, 8)
         self.softmax = nn.Softmax(dim=1)
+        self.flatten = nn.Flatten()
         self.dropout = nn.Dropout(0.5)
 
     def forward(self, x):
         x = self.unitRest1.forward(x)
-        x = F.dropout(x, 0.5)
+        x = self.dropout(x)
 
         x = self.unitRest2.forward(x)
         x = self.dropout(x)
 
-        x = F.relu(self.batchNorm2(x))
+        x = self.batchNorm2(x)
+        x = self.relu(x)
         x = self.dropout(x)
+
         x = self.avgPool(x)
-
-        x = x.view(-1, self.inputsFc1)
-
+        x = self.flatten(x)
         x = self.dropout(x)
         x = self.fc1(x)
         x = self.softmax(x)
