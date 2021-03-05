@@ -150,8 +150,8 @@ for epoch in range(EPOCHS):  # loop over the dataset multiple times
             #running_loss = 0.0
             #writer.add_scalar('Loss/train', running_loss/batch_size, epoch)
 
-    writer.add_scalar('Training/Accuracy', running_loss, epoch)
-    writer.add_scalar('Training/Loss', (100 * correct / total), epoch)
+    writer.add_scalar('Training/Loss', running_loss, epoch)
+    writer.add_scalar('Training/Accuracy', (100 * correct / total), epoch)
 
 print('Accuracy training %d %%' % (100 * correct / total), flush=True)
 print('Finished Training', flush=True)
