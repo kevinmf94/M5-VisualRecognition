@@ -2,12 +2,10 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.utils.tensorboard import SummaryWriter
 from torchvision import transforms, datasets
 #from torch.utils.tensorboard import SummaryWritter
 #import numpy as np 
-
-# Writer will output to ./runs/ directory by default
-#writer = SummaryWriter()
 
 # Constants
 ENABLE_GPU = True
@@ -115,6 +113,9 @@ print(sum(p.numel() for p in net.parameters() if p.requires_grad))
 if ENABLE_GPU:
     print("GPU loaded: " + str(torch.cuda.is_available()), flush=True)
 
+# Writer will output to ./runs/ directory by default
+writer = SummaryWriter("runs/residualnetwork2")
+
 print("Start training", flush=True)
 correct = 0
 total = 0
@@ -148,6 +149,9 @@ for epoch in range(EPOCHS):  # loop over the dataset multiple times
                   (epoch + 1, i + 1, running_loss / batch_size), flush=True)
             #running_loss = 0.0
             #writer.add_scalar('Loss/train', running_loss/batch_size, epoch)
+
+    writer.add_scalar('Training/Accuracy', running_loss, epoch)
+    writer.add_scalar('Training/Loss', (100 * correct / total), epoch)
 
 print('Accuracy training %d %%' % (100 * correct / total), flush=True)
 print('Finished Training', flush=True)
