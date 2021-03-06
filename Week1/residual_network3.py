@@ -1,16 +1,17 @@
 import torch
 import torch.optim as optim
 import torch.nn as nn
-import torch.nn.functional as F
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import transforms, datasets
 
 # Constants
 ENABLE_GPU = True
 GPU_ID = 0
+#DATASET_TRAIN = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/train/'
+#DATASET_TEST = '/Users/kevinmartinfernandez/Workspace/Master/M3/BagOfWords/MIT_split/test/'
 DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
 DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
-EPOCHS = 50
+EPOCHS = 300
 batch_size = 200
 img_width = 32
 img_height = 32
@@ -63,9 +64,9 @@ class UnitRestNet(nn.Module):
         return x
 
 
-class ResidualNetworkModify(nn.Module):
+class Net(nn.Module):
     def __init__(self):
-        super(ResidualNetworkModify, self).__init__()
+        super(Net, self).__init__()
 
         self.unitRest1 = UnitRestNet(3, 8, 3)
         self.dropout1 = nn.Dropout2d(0.5)
@@ -75,7 +76,7 @@ class ResidualNetworkModify(nn.Module):
         self.relu1 = nn.ReLU()
         self.dropout3 = nn.Dropout2d(0.5)
         self.avgPool = nn.AvgPool2d(4, stride=None)
-        self.inputsFc1 = 10 * (img_width // 4) * (img_height // 4)
+        self.inputsFc1 = 10 * (img_width//4) * (img_height//4)
         self.flatten = nn.Flatten()
         self.dropout4 = nn.Dropout(0.5)
         self.fc1 = nn.Linear(self.inputsFc1, 8)
@@ -98,10 +99,8 @@ class ResidualNetworkModify(nn.Module):
         return x
 
 
-net = ResidualNetworkModify()
-writer = SummaryWriter("runs/residualNetworkRmsprop")
-writer.add_text("Model/structure", str(net))
-writer.add_text("Model/paramaters", "Parameters %d" % sum(p.numel() for p in net.parameters() if p.requires_grad))
+net = Net()
+print(net, flush=True)
 
 # Convert Model to CUDA version
 if ENABLE_GPU:
@@ -109,19 +108,23 @@ if ENABLE_GPU:
 
 # Criterion and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.RMSprop(net.parameters(), lr=0.01, momentum=0)
+optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0)
+print(sum(p.numel() for p in net.parameters() if p.requires_grad))
 
 # Training
 if ENABLE_GPU:
     print("GPU loaded: " + str(torch.cuda.is_available()), flush=True)
 
-print("Start traininig", flush=True)
+# Writer will output to ./runs/ directory by default
+writer = SummaryWriter("runs/residualnetwork3Corrected")
+
+print("Start training", flush=True)
 correct = 0
 total = 0
 for epoch in range(EPOCHS):  # loop over the dataset multiple times
 
-    running_loss = 0.0
     epoch_loss = 0.0
+    temp_loss = 0.0
     for i, data in enumerate(trainLoader, 0):
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
@@ -134,35 +137,29 @@ for epoch in range(EPOCHS):  # loop over the dataset multiple times
 
         # forward + backward + optimize
         outputs = net(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-
-        #Accuracy
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
         # print statistics
-        running_loss += loss.item()
         epoch_loss += loss.item()
-        if i % 50 == 49:  # print every 2000 mini-batches
-            lossLog = '[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / 50)
-            writer.add_text("Training/Losses", lossLog)
-            print(lossLog, flush=True)
-            running_loss = 0.0
+        temp_loss += loss.item()
+        if i % 25 == 24:  # print every 2000 mini-batches
+            print('[%d, %5d] loss: %.3f' %
+                  (epoch + 1, i + 1, temp_loss / batch_size), flush=True)
+            writer.add_text("Trainining", '[%d, %5d] loss: %.3f' %
+                            (epoch + 1, i + 1, temp_loss / batch_size))
+            temp_loss = 0.0
 
-    print("Epochs Loss: %.3f" % (epoch_loss / batch_size), flush=True)
-    print("Epochs Acc: %.3f" % (100 * correct / total), flush=True)
-    writer.add_scalar('Training/Loss', epoch_loss / batch_size, epoch)
+    writer.add_scalar('Training/Loss', epoch_loss, epoch)
     writer.add_scalar('Training/Accuracy', (100 * correct / total), epoch)
-    writer.flush()
 
-
-print('Finished Training', flush=True)
-accText = 'Accuracy training %d %%' % (100 * correct / total)
-writer.add_text("Training/FinalAcc", accText)
-print(accText, flush=True)
+writer.add_text("Results", 'Accuracy training %d %%' % (100 * correct / total))
+print('Accuracy training %d %%' % (100 * correct / total), flush=True)
 print('Finished Training', flush=True)
 
 # Train Model
@@ -181,7 +178,5 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-accText = 'Accuracy %d %%' % (100 * correct / total)
-print(accText, flush=True)
-writer.add_text("Test/Accuracy", accText)
-
+writer.add_text("Results", 'Accuracy test %d %%' % (100 * correct / total))
+print('Accuracy test %d %%' % (100 * correct / total), flush=True)
