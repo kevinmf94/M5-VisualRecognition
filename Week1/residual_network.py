@@ -70,7 +70,7 @@ class ResidualNetworkModify(nn.Module):
     def __init__(self):
         super(ResidualNetworkModify, self).__init__()
 
-        self.dropoutValue = 0.25
+        self.dropoutValue = 0.4
 
         self.unitRest1 = UnitRestNet(3, 8, 3)
         self.dropout1 = nn.Dropout(self.dropoutValue)
@@ -104,7 +104,7 @@ class ResidualNetworkModify(nn.Module):
 
 
 net = ResidualNetworkModify()
-writer = SummaryWriter("runs/residualNetworkRmspropLR0_001M0_2_BATCH300_EP300DROP0_25_TEST_DROPOUT")
+writer = SummaryWriter("runs/rsesidualNetworkRmspropLR0_001M0_2_BATCH300_EP300DROP0_4_TEST_DROPOUT")
 writer.add_text("Model/structure", str(net))
 writer.add_text("Model/paramaters", "Parameters %d" % sum(p.numel() for p in net.parameters() if p.requires_grad))
 
@@ -158,22 +158,24 @@ for epoch in range(EPOCHS):  # loop over the dataset multiple times
             running_loss = 0.0
 
     #Validation Test
+    totalVal = 0.0
+    correctVal = 0.0
     with torch.no_grad():
-        data = iter(validationLoader)
-        images, labels = data
+        dataiter = iter(validationLoader)
+        images, labels = dataiter.next()
 
         if ENABLE_GPU:
             images, labels = images.cuda(), labels.cuda()
 
         outputs = net(images)
         _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+        totalVal += labels.size(0)
+        correctVal += (predicted == labels).sum().item()
 
     print("Epochs Loss: %.3f" % (epoch_loss / batch_size), flush=True)
-    print("Epochs Val Acc: %.3f" % (100 * correct / total), flush=True)
+    print("Epochs Val Acc: %.3f" % (100 * correctVal / totalVal), flush=True)
     print("Epochs Acc: %.3f" % (100 * correct / total), flush=True)
-    writer.add_scalar('Validation/Accuracy', epoch_loss / batch_size, epoch)
+    writer.add_scalar('Validation/Accuracy', (100 * correct / total), epoch)
     writer.add_scalar('Training/Loss', epoch_loss / batch_size, epoch)
     writer.add_scalar('Training/Accuracy', (100 * correct / total), epoch)
     writer.flush()
