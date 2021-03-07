@@ -10,8 +10,8 @@ ENABLE_GPU = True
 GPU_ID = 0
 DATASET_TRAIN = '/home/mcv/datasets/MIT_split/train'
 DATASET_TEST = '/home/mcv/datasets/MIT_split/test'
-EPOCHS = 50
-batch_size = 200
+EPOCHS = 300
+batch_size = 300
 img_width = 32
 img_height = 32
 
@@ -28,6 +28,9 @@ transform = transforms.Compose({
 # Load train and test datasets.
 trainDataset = datasets.ImageFolder(DATASET_TRAIN, transform=transform)
 trainLoader = torch.utils.data.DataLoader(trainDataset, batch_size=int(len(trainDataset) / batch_size), shuffle=True)
+
+validationDataset = datasets.ImageFolder(DATASET_TEST, transform=transform)
+validationLoader = torch.utils.data.DataLoader(validationDataset,  batch_size=int(len(trainDataset) / batch_size), shuffle=True)
 
 testDataset = datasets.ImageFolder(DATASET_TEST, transform=transform)
 testLoader = torch.utils.data.DataLoader(testDataset, shuffle=True)
@@ -67,17 +70,19 @@ class ResidualNetworkModify(nn.Module):
     def __init__(self):
         super(ResidualNetworkModify, self).__init__()
 
+        self.dropoutValue = 0.25
+
         self.unitRest1 = UnitRestNet(3, 8, 3)
-        self.dropout1 = nn.Dropout2d(0.5)
+        self.dropout1 = nn.Dropout(self.dropoutValue)
         self.unitRest2 = UnitRestNet(8, 10, 3)
-        self.dropout2 = nn.Dropout2d(0.5)
+        self.dropout2 = nn.Dropout(self.dropoutValue)
         self.batchNorm1 = nn.BatchNorm2d(10, eps=1e-3, momentum=0.99)
         self.relu1 = nn.ReLU()
-        self.dropout3 = nn.Dropout2d(0.5)
+        self.dropout3 = nn.Dropout(self.dropoutValue)
         self.avgPool = nn.AvgPool2d(4, stride=None)
         self.inputsFc1 = 10 * (img_width // 4) * (img_height // 4)
         self.flatten = nn.Flatten()
-        self.dropout4 = nn.Dropout(0.5)
+        self.dropout4 = nn.Dropout(self.dropoutValue)
         self.fc1 = nn.Linear(self.inputsFc1, 8)
         nn.init.xavier_uniform(self.fc1.weight)
         self.softmax = nn.Softmax(dim=1)
@@ -99,7 +104,7 @@ class ResidualNetworkModify(nn.Module):
 
 
 net = ResidualNetworkModify()
-writer = SummaryWriter("runs/residualNetworkRmsprop")
+writer = SummaryWriter("runs/residualNetworkRmspropLR0_001M0_2_BATCH300_EP300DROP0_25_TEST_DROPOUT")
 writer.add_text("Model/structure", str(net))
 writer.add_text("Model/paramaters", "Parameters %d" % sum(p.numel() for p in net.parameters() if p.requires_grad))
 
@@ -109,7 +114,7 @@ if ENABLE_GPU:
 
 # Criterion and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.RMSprop(net.parameters(), lr=0.01, momentum=0)
+optimizer = optim.RMSprop(net.parameters(), lr=0.001, momentum=0.2)
 
 # Training
 if ENABLE_GPU:
@@ -152,8 +157,23 @@ for epoch in range(EPOCHS):  # loop over the dataset multiple times
             print(lossLog, flush=True)
             running_loss = 0.0
 
+    #Validation Test
+    with torch.no_grad():
+        data = iter(validationLoader)
+        images, labels = data
+
+        if ENABLE_GPU:
+            images, labels = images.cuda(), labels.cuda()
+
+        outputs = net(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
     print("Epochs Loss: %.3f" % (epoch_loss / batch_size), flush=True)
+    print("Epochs Val Acc: %.3f" % (100 * correct / total), flush=True)
     print("Epochs Acc: %.3f" % (100 * correct / total), flush=True)
+    writer.add_scalar('Validation/Accuracy', epoch_loss / batch_size, epoch)
     writer.add_scalar('Training/Loss', epoch_loss / batch_size, epoch)
     writer.add_scalar('Training/Accuracy', (100 * correct / total), epoch)
     writer.flush()
@@ -184,4 +204,5 @@ with torch.no_grad():
 accText = 'Accuracy %d %%' % (100 * correct / total)
 print(accText, flush=True)
 writer.add_text("Test/Accuracy", accText)
+writer.flush()
 
