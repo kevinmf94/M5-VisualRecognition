@@ -85,7 +85,6 @@ class ResidualNetworkModify(nn.Module):
         self.dropout4 = nn.Dropout(self.dropoutValue)
         self.fc1 = nn.Linear(self.inputsFc1, 8)
         nn.init.xavier_uniform(self.fc1.weight)
-        self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         x = self.unitRest1.forward(x)
@@ -99,7 +98,6 @@ class ResidualNetworkModify(nn.Module):
         x = self.flatten(x)
         x = self.dropout4(x)
         x = self.fc1(x)
-        x = self.softmax(x)
         return x
 
 
