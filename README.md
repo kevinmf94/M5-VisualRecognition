@@ -7,4 +7,4 @@ Daniel Yuste (danielyustegalvez@gmail.com)\
 Kevin Martín (kevinmf94@gmail.com)
 
 Overleaf Report:\
-`https://es.overleaf.com/read/ggbnhqffgdkx`
+https://es.overleaf.com/read/ggbnhqffgdkx
