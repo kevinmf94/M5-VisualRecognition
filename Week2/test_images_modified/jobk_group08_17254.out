@@ -1,0 +1,36 @@
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_land17Modificado.jpg
+Time inference:  0.16058945655822754
+tensor([7], device='cuda:0')
+Boxes(tensor([[  8.4504,  89.9996, 251.9447, 199.4051]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_land17Modificado.jpg
+Time inference:  0.06008243979886174
+tensor([7], device='cuda:0')
+Boxes(tensor([[ 12.4473,  87.9898, 249.8862, 196.8456]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_land180Modificado.jpg
+Time inference:  0.14610742032527924
+tensor([7, 2], device='cuda:0')
+Boxes(tensor([[  8.4724,  89.8764, 251.4087, 194.2982],
+        [  9.5960,  94.5508, 248.2525, 197.6459]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_land180Modificado.jpg
+Time inference:  0.059978569857776165
+tensor([7, 2], device='cuda:0')
+Boxes(tensor([[ 10.5695,  87.6813, 249.1567, 194.7091],
+        [ 10.5695,  87.6813, 249.1567, 194.7091]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_land196Modificado.jpg
+Time inference:  0.13398862909525633
+tensor([7], device='cuda:0')
+Boxes(tensor([[ 10.6724,  92.5712, 251.9588, 193.8233]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_land196Modificado.jpg
+Time inference:  0.05779546918347478
+tensor([2, 7], device='cuda:0')
+Boxes(tensor([[ 14.1855,  88.4528, 249.8268, 195.9184],
+        [ 14.1855,  88.4528, 249.8268, 195.9184]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_land198Modificado.jpg
+Time inference:  0.1259599099867046
+tensor([7], device='cuda:0')
+Boxes(tensor([[  7.0135,  92.3645, 249.0251, 195.8897]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_land198Modificado.jpg
+Time inference:  0.0564417140558362
+tensor([7, 2], device='cuda:0')
+Boxes(tensor([[ 10.2845,  88.9608, 250.3338, 195.2653],
+        [ 10.2845,  88.9608, 250.3338, 195.2653]], device='cuda:0'))

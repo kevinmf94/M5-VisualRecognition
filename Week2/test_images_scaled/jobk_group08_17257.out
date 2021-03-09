@@ -1,0 +1,44 @@
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_scale1.jpg
+Time inference:  0.15858267294242978
+tensor([2], device='cuda:0')
+Boxes(tensor([[  9.7841, 236.3273,  35.2734, 247.2385]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_scale1.jpg
+Time inference:  0.05967266205698252
+tensor([2], device='cuda:0')
+Boxes(tensor([[ 10.0709, 235.7081,  35.2274, 246.9011]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_scale2.jpg
+Time inference:  0.1441004597581923
+tensor([7, 2], device='cuda:0')
+Boxes(tensor([[ 12.2339, 214.1707,  85.8788, 245.8740],
+        [ 13.0369, 213.9052,  86.5138, 245.5519]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_scale2.jpg
+Time inference:  0.05979810981079936
+tensor([2], device='cuda:0')
+Boxes(tensor([[ 11.3099, 214.2604,  86.2284, 245.3521]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_scale3.jpg
+Time inference:  0.1356792519800365
+tensor([2, 7], device='cuda:0')
+Boxes(tensor([[ 15.1646, 172.5883, 184.2297, 245.7738],
+        [ 14.9080, 172.0859, 185.5470, 246.4118]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_scale3.jpg
+Time inference:  0.05790169211104512
+tensor([7], device='cuda:0')
+Boxes(tensor([[ 15.6097, 172.0516, 184.8403, 246.3844]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_scale4.jpg
+Time inference:  0.12845249893143773
+tensor([7, 2], device='cuda:0')
+Boxes(tensor([[  5.8939, 139.2405, 252.0271, 246.5611],
+        [  4.4021, 138.6953, 252.5009, 246.0458]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_scale4.jpg
+Time inference:  0.060126197058707476
+tensor([7, 2], device='cuda:0')
+Boxes(tensor([[  9.0761, 140.6628, 250.8707, 248.2988],
+        [  7.7887, 135.9493, 252.0870, 245.4252]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_scale5.jpg
+Time inference:  0.12266304809600115
+tensor([7], device='cuda:0')
+Boxes(tensor([[  7.8740,  53.4492, 255.2496, 238.1143]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_scale5.jpg
+Time inference:  0.06092914193868637
+tensor([7], device='cuda:0')
+Boxes(tensor([[  8.3790,  56.1239, 253.7453, 243.0182]], device='cuda:0'))

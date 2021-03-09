@@ -1,0 +1,14 @@
+Model, time
+faster_rcnn_R_101_C4_3x.yaml, 0.33540163608267903
+faster_rcnn_R_101_DC5_3x.yaml, 0.1406355882063508
+faster_rcnn_R_101_FPN_3x.yaml, 0.07652095891535282
+faster_rcnn_R_50_C4_1x.yaml, 0.22359222080558538
+faster_rcnn_R_50_C4_3x.yaml, 0.21866448922082782
+faster_rcnn_R_50_DC5_1x.yaml, 0.14290649956092238
+faster_rcnn_R_50_DC5_3x.yaml, 0.12649260740727186
+faster_rcnn_R_50_FPN_1x.yaml, 0.07557482598349452
+faster_rcnn_R_50_FPN_3x.yaml, 0.07490042829886079
+faster_rcnn_X_101_32x8d_FPN_3x.yaml, 0.14504750911146402
+retinanet_R_101_FPN_3x.yaml, 0.09430440701544285
+retinanet_R_50_FPN_1x.yaml, 0.09469544142484665
+retinanet_R_50_FPN_3x.yaml, 0.07035705912858248

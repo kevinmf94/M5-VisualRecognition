@@ -1,0 +1,35 @@
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_rot0.jpg
+Time inference:  0.15553275728598237
+tensor([7, 2], device='cuda:0')
+Boxes(tensor([[  7.5152,  88.4090, 250.4966, 196.6493],
+        [  7.5822,  93.3462, 248.8337, 194.5564]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_rot0.jpg
+Time inference:  0.06150179263204336
+tensor([7, 2], device='cuda:0')
+Boxes(tensor([[ 10.9302,  88.1158, 250.0570, 194.7322],
+        [ 10.9302,  88.1158, 250.0570, 194.7322]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_rot90.jpg
+Time inference:  0.1549113760702312
+tensor([10,  7], device='cuda:0')
+Boxes(tensor([[ 61.1897,  10.6091, 170.3290, 252.3097],
+        [ 56.4764,   8.7984, 167.6873, 248.4261]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_rot90.jpg
+Time inference:  0.06239732587710023
+tensor([9], device='cuda:0')
+Boxes(tensor([[ 62.5312,   8.5185, 166.8249, 245.2555]], device='cuda:0'))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_rot180.jpg
+Time inference:  0.13972209859639406
+tensor([2], device='cuda:0')
+Boxes(tensor([[  9.6381,  68.3368, 243.0338, 166.9718]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_rot180.jpg
+Time inference:  0.05823066411539912
+tensor([], device='cuda:0', dtype=torch.int64)
+Boxes(tensor([], device='cuda:0', size=(0, 4)))
+Modified_faster_rcnn_X_101_32x8d_FPN_3x.yaml_rot270.jpg
+Time inference:  0.13038178533315659
+tensor([10], device='cuda:0')
+Boxes(tensor([[ 90.4526,   6.3327, 198.3412, 249.9989]], device='cuda:0'))
+Modified_retinanet_R_50_FPN_1x.yaml_rot270.jpg
+Time inference:  0.05722039891406894
+tensor([12], device='cuda:0')
+Boxes(tensor([[ 95.4770,  11.9122, 197.6983, 245.6384]], device='cuda:0'))
