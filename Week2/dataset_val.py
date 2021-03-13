@@ -6,7 +6,7 @@ from detectron2.structures import BoxMode
 from sklearn.preprocessing import LabelEncoder
 
 KITTY_DATASET = '/home/mcv/datasets/KITTI/'
-TRAIN_IMAGES_LIST = 'train_kitti.txt'
+TRAIN_IMAGES_LIST = 'val_kitti.txt'
 TRAIN_IMG_PATH = os.path.join(KITTY_DATASET, 'data_object_image_2/training/image_2/')
 TRAIN_LABELS_PATH = os.path.join(KITTY_DATASET, 'training/label_2/')
 CLASS_FIELD = 0
@@ -95,6 +95,6 @@ if __name__ == '__main__':
     train_dict = get_kitty_dicts(KITTY_DATASET)
     print("End preprocessing", flush=True)
     print("Saving dat", flush=True)
-    train_dict_file = open('train_dict.dat', 'wb')
+    train_dict_file = open('val_dict.dat', 'wb')
     pickle.dump(train_dict, train_dict_file)
     print("dat saved!", flush=True)
