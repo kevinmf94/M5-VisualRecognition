@@ -12,7 +12,7 @@ from detectron2.utils.visualizer import Visualizer
 from detectron2.evaluation import COCOEvaluator, inference_on_dataset
 from detectron2.data import build_detection_test_loader
 
-KITTY_DATASET = '/home/mcv/datasets/KITTI/'
+KITTI_DATASET = '/home/mcv/datasets/KITTI/'
 CLASSES = ['Car', 'Van', 'Truck', 'Pedestrian', 'Person_sitting',
            'Cyclist', 'Tram', 'Misc', 'DontCare']
 
@@ -29,18 +29,18 @@ def load_val_dataset():
     return val_dict
 
 
-DatasetCatalog.register("kitty_train", load_train_dataset)
-DatasetCatalog.register("kitty_val", load_val_dataset)
-MetadataCatalog.get("kitty_train").set(thing_classes=CLASSES)
-MetadataCatalog.get("kitty_val").set(thing_classes=CLASSES)
-kitty_metadata = MetadataCatalog.get("kitty_train")
+DatasetCatalog.register("kitti_train", load_train_dataset)
+DatasetCatalog.register("kitti_val", load_val_dataset)
+MetadataCatalog.get("kitti_train").set(thing_classes=CLASSES)
+MetadataCatalog.get("kitti_val").set(thing_classes=CLASSES)
+kitti_metadata = MetadataCatalog.get("kitti_train")
 
 train_dataset_dicts = load_train_dataset()
 val_dataset_dicts = load_val_dataset()
 
 for d in random.sample(train_dataset_dicts, 3):
     img = cv2.imread(d["file_name"])
-    visualizer = Visualizer(img[:, :, ::-1], metadata=kitty_metadata, scale=0.5)
+    visualizer = Visualizer(img[:, :, ::-1], metadata=kitti_metadata, scale=0.5)
     out = visualizer.draw_dataset_dict(d)
     cv2.imwrite(d["image_id"]+".png", out.get_image()[:, :, ::-1])
 
@@ -69,7 +69,7 @@ print("End traininig!", flush=True)
 
 print("Test inference")
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5  # set threshold for this model
-img = cv2.imread(os.path.join(KITTY_DATASET, 'data_object_image_2/testing/image_2/') + '000017.png')
+img = cv2.imread(os.path.join(KITTI_DATASET, 'data_object_image_2/testing/image_2/') + '000017.png')
 predictor = DefaultPredictor(cfg)
 outputs = predictor(img)
 
@@ -78,8 +78,8 @@ v = Visualizer(img[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scal
 out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
 cv2.imwrite("output_test.png", out.get_image()[:, :, ::-1])
 
-evaluator = COCOEvaluator("kitty_val", ("bbox", "segm"), False, output_dir="./output/")
-val_loader = build_detection_test_loader(cfg, "kitty_val")
+evaluator = COCOEvaluator("kitti_val", ("bbox", "segm"), False, output_dir="./output/")
+val_loader = build_detection_test_loader(cfg, "kitti_val")
 print(inference_on_dataset(trainer.model, val_loader, evaluator))
 
 
