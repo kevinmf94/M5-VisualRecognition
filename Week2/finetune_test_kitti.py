@@ -5,7 +5,9 @@ from detectron2.config import get_cfg
 from detectron2.engine import DefaultPredictor
 from detectron2.model_zoo import model_zoo
 
+RESULTS_DIR = "results_kitti_test/"
 KITTY_DATASET = '/home/mcv/datasets/KITTI/'
+LABEL_FOLDER = KITTY_DATASET + "training/label_2/"
 TEST_IMAGES_LIST = KITTY_DATASET + 'test_kitti.txt'
 TEST_IMG_PATH = os.path.join(KITTY_DATASET, 'data_object_image_2/testing/image_2/')
 CLASSES = ['Car', 'Van', 'Truck', 'Pedestrian', 'Person_sitting',
@@ -20,10 +22,8 @@ def read_array_file(filename):
     return data
 
 
-def instance_to_kitty(instance, position):
-    # Kitti Output example
-    # Pedestrian 0.00 0 -0.20 712.40 143.00 810.73 307.92 1.89 0.48 1.20 1.84 1.47 8.41 0.01"
-    """----------------------------------------------------------------------------
+"""
+----------------------------------------------------------------------------
    1    type         Describes the type of object: 'Car', 'Van', 'Truck',
                      'Pedestrian', 'Person_sitting', 'Cyclist', 'Tram',
                      'Misc' or 'DontCare'
@@ -39,18 +39,22 @@ def instance_to_kitty(instance, position):
    3    location     3D object location x,y,z in camera coordinates (in meters)
    1    rotation_y   Rotation ry around Y-axis in camera coordinates [-pi..pi]
    1    score        Only for results: Float, indicating confidence in
-                     detection, needed for p/r curves, higher is better."""
-
+                     detection, needed for p/r curves, higher is better.
+    Kitti Output example
+Pedestrian 0.00 0 -0.20 712.40 143.00 810.73 307.92 1.89 0.48 1.20 1.84 1.47 8.41 0.01
+"""
+def instance_to_kitty(instance, position):
     bbox = instance.pred_boxes[position].tensor.cpu().data[0]
     score = instance.scores[position].cpu().data
     class_id = instance.pred_classes[position].cpu().data
     class_str = CLASSES[class_id]
 
-    return "%s %.2f %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f" \
+    return "%s %.2f %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n" \
            % (class_str, 0, 0, 0, bbox[0], bbox[1], bbox[2], bbox[3], 0, 0, 0, 0, 0, 0, score)
 
 
 def generate_testing_kitty_files():
+
     # Load model
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_X_101_32x8d_FPN_3x.yaml"))
@@ -63,6 +67,8 @@ def generate_testing_kitty_files():
     test_filenames = read_array_file(TEST_IMAGES_LIST)
     i = 0
     total = len(test_filenames)
+    labels_file = open("test_labels.txt", "w")
+
     for test_filename in test_filenames:
 
         idx = test_filename.split(".")[0]
@@ -70,19 +76,24 @@ def generate_testing_kitty_files():
         i += 1
         print("Processing image %d of %d with id %s " % (i, total, idx), flush=True)
 
-        print(img_filename)
         img = cv2.imread(img_filename)
-        print(img.shape)
         output = predictor(img)
 
-        print(output['instances'])
-        print("     ")
+        print("Instances found: " + str(len(output['instances'])))
+        labels_file.write(LABEL_FOLDER + idx + ".txt\n")
 
-        for j in range(len(output['instances'])):
-            kitti_str = instance_to_kitty(output['instances'], j)
-            print(kitti_str)
-            exit()
+        with open(RESULTS_DIR+"/data/"+test_filename, 'w') as f_result:
+            lines = []
+            for j in range(len(output['instances'])):
+                kitti_str = instance_to_kitty(output['instances'], j)
+                lines.append(kitti_str)
+
+            f_result.writelines(lines)
+
+    labels_file.close()
 
 
 if __name__ == '__main__':
+    os.mkdir(RESULTS_DIR)
+    os.mkdir(RESULTS_DIR+"/data")
     generate_testing_kitty_files()
