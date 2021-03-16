@@ -50,7 +50,7 @@ def generate_dict(files):
         data = pd.read_csv(KITTIMOTS_TRAIN_INSTANCES + file, delimiter=" ",
                            names=["Frame", "Id", "Class", "Height", "Width", "RLE", "BBox"])
         data = data.apply(lambda row: rle_to_bbox(row), axis=1)
-        data = data[(data.Class == 1) & (data.Class == 2)]
+        data = data[(data.Class == 1) | (data.Class == 2)]
         sequence = file.split(".")[0]
 
         print("Processing sequence %s" % sequence, flush=True)
@@ -67,16 +67,19 @@ if __name__ == '__main__':
     print("Generating KITTI-MOTS", flush=True)
 
     train_records = generate_dict(TRAIN)
+    print("Train %d" % len(train_records))
     with open('kittimots_train.dat', 'wb') as f:
         pickle.dump(train_records, f)
         print("Generated kittimots_train.dat", flush=True)
 
     val_records = generate_dict(VALIDATION)
+    print("Val %d" % len(val_records))
     with open('kittimots_val.dat', 'wb') as f:
         pickle.dump(val_records, f)
         print("Generated kittimots_val.dat", flush=True)
 
     test_records = generate_dict(TEST)
+    print("Test %d" % len(test_records))
     with open('kittimots_test.dat', 'wb') as f:
         pickle.dump(test_records, f)
         print("Generated kittimots_test.dat", flush=True)
