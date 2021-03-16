@@ -36,7 +36,7 @@ def annotations_to_dict(annotations):
 
 def frame_to_record(sequence, frame, annotations):
     return {
-        "file_name": os.path.join(KITTIMOTS_TRAIN, "images/", sequence) + ("/%06d.jpg" % frame),
+        "file_name": os.path.join(KITTIMOTS_TRAIN, sequence) + ("/%06d.png" % frame),
         "image_id": "%s_%06d" % (sequence, frame),
         "height": annotations.Height.values[0],
         "width": annotations.Width.values[0],
