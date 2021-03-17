@@ -27,7 +27,7 @@ def annotations_to_dict(annotations):
     objs = []
     for index, annotation in annotations.iterrows():
         obj = {
-            "bbox": annotation.BBox.astype(int),
+            "bbox": annotation.BBox.astype(int).tolist(),
             "bbox_mode": BoxMode.XYWH_ABS,
             "category_id": PARSE_CLASS[annotation.Class]
         }
