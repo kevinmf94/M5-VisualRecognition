@@ -26,7 +26,7 @@ def annotations_to_dict(annotations):
 
         obj = {
             "bbox": annotation.BBox,
-            "bbox_mode": BoxMode.XYXY_ABS,
+            "bbox_mode": BoxMode.XYWH_ABS,
             "category_id": annotation.Class
         }
 
