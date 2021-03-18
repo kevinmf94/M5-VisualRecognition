@@ -1,3 +1,4 @@
+import glob
 import os
 import pickle
 
@@ -49,21 +50,21 @@ def generate_dict(sequences):
     dataset_dict = []
 
     for sequence in sequences:
-        images = os.listdir(os.path.join(MOTS_TRAIN_IMG, sequence))
+        images = glob.glob(os.path.join(MOTS_TRAIN_IMG, sequence) + "/*.jpg")
         frames = len(images)
         images.sort()
 
         data = pd.read_csv(MOTS_TRAIN_INSTANCES + sequence + ".txt", delimiter=" ",
                            names=["Frame", "Id", "Class", "Height", "Width", "RLE", "BBox"])
+        data = data[(data.Class == 2)]
         data = data.apply(lambda row: rle_to_bbox(row), axis=1)
         height = data.Height[0]
         width = data.Width[0]
 
         print("Processing sequence %s" % sequence, flush=True)
-        for frame in range(frames):
+        for frame in range(1, frames):
             print("Processing frame %s" % frame, flush=True, end="\r")
             annotations = data[data.Frame == frame]
-            annotations = annotations[(annotations.Class == 2)]
             record = frame_to_record(sequence, frame, annotations, (height, width))
             dataset_dict.append(record)
 
