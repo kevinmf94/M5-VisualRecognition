@@ -15,7 +15,7 @@ VALIDATION = ["0010", "0011"]
 TEST = ["0012", "0013", "0014", "0015", "0016", "0017", "0018", "0019", "0020"]
 
 # In COCO Car = 3, Person = 1 (Pedestrian)
-PARSE_CLASS = {1: 3, 2: 1}
+PARSE_CLASS = {1: 2, 2: 0}
 
 def rle_to_bbox(row):
     rle = {'counts': row.RLE.encode('utf-8'), 'size': [row.Height, row.Width]}
