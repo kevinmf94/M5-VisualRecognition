@@ -2,14 +2,15 @@ import os
 import pickle
 
 import torch
+from detectron2.evaluation import COCOEvaluator 
 from detectron2.config import get_cfg
 from detectron2.data import DatasetCatalog, MetadataCatalog, build_detection_train_loader
 from detectron2.engine import DefaultTrainer, HookBase
 from detectron2.model_zoo import model_zoo
 from detectron2.utils import comm
 
-TRAIN_DAT = '../mots_train.dat'
-VAL_DAT = '../mots_validation.dat'
+TRAIN_DAT = '../../mots_train.dat'
+VAL_DAT = '../../mots_validation.dat'
 TRAIN_NAME = 'mots_train'
 VAL_NAME = 'mots_val'
 CLASSES = ['Pedestrian']
@@ -38,7 +39,7 @@ class ValidationLoss(HookBase):
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg.clone()
-        self.cfg.DATASETS.TRAIN = cfg.DATASETS.VAL
+        self.cfg.DATASETS.TRAIN = cfg.DATASETS.TEST
         self._loader = iter(build_detection_train_loader(self.cfg))
 
     def after_step(self):
@@ -61,14 +62,15 @@ class ValidationLoss(HookBase):
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_X_101_32x8d_FPN_3x.yaml"))
 cfg.DATASETS.TRAIN = (TRAIN_NAME,)
-cfg.DATASETS.VAL = (VAL_NAME,)
+cfg.DATASETS.TEST = (VAL_NAME,)
+cfg.TEST.EVAL_PERIOD = 100
 cfg.DATALOADER.NUM_WORKERS = 4
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_X_101_32x8d_FPN_3x.yaml")  # Let training initialize from model zoo
 cfg.SOLVER.IMS_PER_BATCH = 2
-cfg.SOLVER.BASE_LR = 0.0025  # pick a good LR
+cfg.SOLVER.BASE_LR = 0.05  # pick a good LR
 cfg.SOLVER.MAX_ITER = 100  # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
 cfg.SOLVER.STEPS = []  # do not decay learning rate
-cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512  # faster, and good enough for this toy dataset (default: 512)
+cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 256  # faster, and good enough for this toy dataset (default: 512)
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = len(CLASSES)
 
 # Train
@@ -81,3 +83,15 @@ trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
 trainer.resume_or_load(resume=False)
 trainer.train()
 
+
+
+# load weights
+cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5   # set the testing threshold for this model
+
+# Set training data-set path
+cfg.DATASETS.TEST = (VAL_NAME,)
+
+
+evaluator = COCOEvaluator(VAL_NAME, cfg, False, output_dir="./output/")
+trainer.test(cfg, trainer.model, evaluators=[evaluator])
