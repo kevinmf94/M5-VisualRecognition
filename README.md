@@ -9,6 +9,7 @@ Week 2
 - dataset_train.py: Process the images of KITTI dataset and save its dictionary
 - dataset_val.py: Process the images of KITTI dataset and save its dictionary
 - finetune_faster_kitti.py: FineTuning of the KITTI dataset
+
 [Week 2 GoogleSlides](https://docs.google.com/presentation/d/1xVxzzyKaNUuyHFrhvmb2tUVMFiJeOCyTNdTqXJpn-kE/edit)
 
 Week 3
@@ -37,5 +38,4 @@ Please feel free to contact us with any questions, suggestions or comments:
 - Kevin Martín (kevinmf94@gmail.com)
 
 ## Overleaf Report:
-Here you can find the report with the reults of all this experiments
-[Overleaf link](https://es.overleaf.com/read/ggbnhqffgdkx)
+Here you can find the report with the reults of all this experiments [Overleaf link](https://es.overleaf.com/read/ggbnhqffgdkx).
