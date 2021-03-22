@@ -9,7 +9,7 @@ Week 2
 - dataset_train.py: Process the images of KITTI dataset and save its dictionary
 - dataset_val.py: Process the images of KITTI dataset and save its dictionary
 - finetune_faster_kitti.py: FineTuning of the KITTI dataset
-- GoogleSlides: https://docs.google.com/presentation/d/1xVxzzyKaNUuyHFrhvmb2tUVMFiJeOCyTNdTqXJpn-kE/edit
+[Week 2 GoogleSlides](https://docs.google.com/presentation/d/1xVxzzyKaNUuyHFrhvmb2tUVMFiJeOCyTNdTqXJpn-kE/edit)
 
 Week 3
 - task_b/inference-kitti-mots.py: Obtain cualitative results of Faster R-CNN and RetinaNet with pre-trained configuration.
@@ -38,4 +38,4 @@ Please feel free to contact us with any questions, suggestions or comments:
 
 ## Overleaf Report:
 Here you can find the report with the reults of all this experiments
-https://es.overleaf.com/read/ggbnhqffgdkx
+[Overleaf link](https://es.overleaf.com/read/ggbnhqffgdkx)
