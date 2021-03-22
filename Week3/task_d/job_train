@@ -8,8 +8,8 @@
 
 python train-faster-mots.py
 
-python train-kitti-mots.py
+python train-faster-kittimots.py
 
 python train-retina-mots.py
 
-python train-retina_kitti-mots.py
+python train-retina_kittimots.py
