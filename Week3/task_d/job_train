@@ -5,4 +5,11 @@
 #SBATCH --gres gpu:1 # Para pedir Pascales MAX 8
 #SBATCH -o %x_%u_%j.out # File to which STDOUT will be written
 #SBATCH -e %x_%u_%j.err # File to which STDERR will be written
+
 python train-faster-mots.py
+
+python train-kitti-mots.py
+
+python train-retina-mots.py
+
+python train-retina_kitti-mots.py
