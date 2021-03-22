@@ -23,6 +23,8 @@ Week 3
 - task_d/train-retina-mix.py: Train and validate RetinaNet with our mixed dataset.
 - fask_e/faster_kittimots.py: Test trained Faster R-CNN on KittiMots.
 
+[Week 3 GoogleSlides](https://docs.google.com/presentation/d/1Ty_v3sNSni04wZqKECGhFyjLhow89W6RBIg4NojFJrk/edit?usp=sharing)
+
 
 Group 08:
 
