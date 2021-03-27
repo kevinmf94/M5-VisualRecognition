@@ -1,10 +1,15 @@
+import os
 import pickle
+import timeit
 
+import cv2
 from detectron2.config import get_cfg
 from detectron2.data import build_detection_test_loader, DatasetCatalog, MetadataCatalog
 from detectron2.engine import DefaultPredictor
 from detectron2.evaluation import COCOEvaluator, inference_on_dataset
 from detectron2.model_zoo import model_zoo
+from detectron2.utils.visualizer import Visualizer
+from numpy import random
 
 configs = {
     "COCO-InstanceSegmentation": [
@@ -24,18 +29,14 @@ configs = {
     ]
 }
 
+with open('../../kittimots_test.dat', 'rb') as f:
+    val_data = pickle.load(f)
 
-def load_test_dataset():
-    with open('../kittimots_test_coco.dat', 'rb') as f:
-        val_data = pickle.load(f)
-    return val_data
-
-
-DatasetCatalog.register("kittimots_test_coco", load_test_dataset)
-coco_metadata = MetadataCatalog.get("coco_2017_val")
-MetadataCatalog.get("kittimots_test_coco").set(thing_classes=coco_metadata.thing_classes)
+rand_items = random.randint(len(val_data), size=(10))
 
 for config in configs.keys():
+
+    os.mkdir(config)
     for model in configs[config]:
 
         MODEL = '%s/%s' % (config, model)
@@ -52,11 +53,22 @@ for config in configs.keys():
         cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(MODEL)
         cfg.DATALOADER.NUM_WORKERS = 4
 
-        trainer = DefaultPredictor(cfg)
+        predictor = DefaultPredictor(cfg)
 
-        # Evaluate
-        val_loader = build_detection_test_loader(cfg, "kittimots_test_coco")
-        evaluator = COCOEvaluator("kittimots_test_coco", ("bbox", "segm"), False, output_dir="./output_%s/" % model)
-        print(inference_on_dataset(trainer.model, val_loader, evaluator))
+        os.mkdir(config+"/"+model)
+        for i in rand_items:
+
+            img = cv2.imread(val_data[i]['file_name'])
+            print(val_data[i]['image_id'])
+
+            start = timeit.default_timer()
+            outputs = predictor(img)
+            stop = timeit.default_timer()
+            print('Time inference: ', stop - start)
+
+            # Visualizer
+            v = Visualizer(img[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1.2)
+            out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+            cv2.imwrite("%s/output_%s.jpg" % (MODEL, val_data[i]['image_id']), out.get_image()[:, :, ::-1])
 
 
