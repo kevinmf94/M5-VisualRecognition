@@ -1,0 +1,61 @@
+Loading and preparing results...
+DONE (t=0.06s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *bbox*
+COCOeval_opt.evaluate() finished in 5.45 seconds.
+Accumulating evaluation results...
+COCOeval_opt.accumulate() finished in 0.81 seconds.
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.564
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.810
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.634
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.356
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.662
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.715
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.171
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.637
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.651
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.469
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.737
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.875
+Loading and preparing results...
+DONE (t=0.62s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *segm*
+COCOeval_opt.evaluate() finished in 5.76 seconds.
+Accumulating evaluation results...
+COCOeval_opt.accumulate() finished in 1.10 seconds.
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.518
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.800
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.568
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.290
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.604
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.734
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.158
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.586
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.598
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.417
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.680
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.832
+OrderedDict([('bbox', {'AP': 56.38221859190809, 'AP50': 81.02804762194555, 'AP75': 63.35603525016366, 'APs': 35.559401414922995, 'APm': 66.20507621923691, 'APl': 71.54895637166662, 'AP-person': 49.10271160630961, 'AP-bicycle': nan, 'AP-car': 63.6617255775066, 'AP-motorcycle': nan, 'AP-airplane': nan, 'AP-bus': nan, 'AP-train': nan, 'AP-truck': nan, 'AP-boat': nan, 'AP-traffic light': nan, 'AP-fire hydrant': nan, 'AP-stop sign': nan, 'AP-parking meter': nan, 'AP-bench': nan, 'AP-bird': nan, 'AP-cat': nan, 'AP-dog': nan, 'AP-horse': nan, 'AP-sheep': nan, 'AP-cow': nan, 'AP-elephant': nan, 'AP-bear': nan, 'AP-zebra': nan, 'AP-giraffe': nan, 'AP-backpack': nan, 'AP-umbrella': nan, 'AP-handbag': nan, 'AP-tie': nan, 'AP-suitcase': nan, 'AP-frisbee': nan, 'AP-skis': nan, 'AP-snowboard': nan, 'AP-sports ball': nan, 'AP-kite': nan, 'AP-baseball bat': nan, 'AP-baseball glove': nan, 'AP-skateboard': nan, 'AP-surfboard': nan, 'AP-tennis racket': nan, 'AP-bottle': nan, 'AP-wine glass': nan, 'AP-cup': nan, 'AP-fork': nan, 'AP-knife': nan, 'AP-spoon': nan, 'AP-bowl': nan, 'AP-banana': nan, 'AP-apple': nan, 'AP-sandwich': nan, 'AP-orange': nan, 'AP-broccoli': nan, 'AP-carrot': nan, 'AP-hot dog': nan, 'AP-pizza': nan, 'AP-donut': nan, 'AP-cake': nan, 'AP-chair': nan, 'AP-couch': nan, 'AP-potted plant': nan, 'AP-bed': nan, 'AP-dining table': nan, 'AP-toilet': nan, 'AP-tv': nan, 'AP-laptop': nan, 'AP-mouse': nan, 'AP-remote': nan, 'AP-keyboard': nan, 'AP-cell phone': nan, 'AP-microwave': nan, 'AP-oven': nan, 'AP-toaster': nan, 'AP-sink': nan, 'AP-refrigerator': nan, 'AP-book': nan, 'AP-clock': nan, 'AP-vase': nan, 'AP-scissors': nan, 'AP-teddy bear': nan, 'AP-hair drier': nan, 'AP-toothbrush': nan}), ('segm', {'AP': 51.803202294699076, 'AP50': 80.00641794284545, 'AP75': 56.75446603733412, 'APs': 28.95966553977592, 'APm': 60.39948433738977, 'APl': 73.44596321027772, 'AP-person': 40.096735662921354, 'AP-bicycle': nan, 'AP-car': 63.50966892647681, 'AP-motorcycle': nan, 'AP-airplane': nan, 'AP-bus': nan, 'AP-train': nan, 'AP-truck': nan, 'AP-boat': nan, 'AP-traffic light': nan, 'AP-fire hydrant': nan, 'AP-stop sign': nan, 'AP-parking meter': nan, 'AP-bench': nan, 'AP-bird': nan, 'AP-cat': nan, 'AP-dog': nan, 'AP-horse': nan, 'AP-sheep': nan, 'AP-cow': nan, 'AP-elephant': nan, 'AP-bear': nan, 'AP-zebra': nan, 'AP-giraffe': nan, 'AP-backpack': nan, 'AP-umbrella': nan, 'AP-handbag': nan, 'AP-tie': nan, 'AP-suitcase': nan, 'AP-frisbee': nan, 'AP-skis': nan, 'AP-snowboard': nan, 'AP-sports ball': nan, 'AP-kite': nan, 'AP-baseball bat': nan, 'AP-baseball glove': nan, 'AP-skateboard': nan, 'AP-surfboard': nan, 'AP-tennis racket': nan, 'AP-bottle': nan, 'AP-wine glass': nan, 'AP-cup': nan, 'AP-fork': nan, 'AP-knife': nan, 'AP-spoon': nan, 'AP-bowl': nan, 'AP-banana': nan, 'AP-apple': nan, 'AP-sandwich': nan, 'AP-orange': nan, 'AP-broccoli': nan, 'AP-carrot': nan, 'AP-hot dog': nan, 'AP-pizza': nan, 'AP-donut': nan, 'AP-cake': nan, 'AP-chair': nan, 'AP-couch': nan, 'AP-potted plant': nan, 'AP-bed': nan, 'AP-dining table': nan, 'AP-toilet': nan, 'AP-tv': nan, 'AP-laptop': nan, 'AP-mouse': nan, 'AP-remote': nan, 'AP-keyboard': nan, 'AP-cell phone': nan, 'AP-microwave': nan, 'AP-oven': nan, 'AP-toaster': nan, 'AP-sink': nan, 'AP-refrigerator': nan, 'AP-book': nan, 'AP-clock': nan, 'AP-vase': nan, 'AP-scissors': nan, 'AP-teddy bear': nan, 'AP-hair drier': nan, 'AP-toothbrush': nan})])
+0015/000152
+Time inference:  0.071779765188694
+0016/000027
+Time inference:  0.06865992397069931
+0019/000115
+Time inference:  0.06674867682158947
+0019/000222
+Time inference:  0.067463468760252
+0019/000324
+Time inference:  0.0672707399353385
+0019/000570
+Time inference:  0.06677225604653358
+0019/001035
+Time inference:  0.06437516398727894
+0020/000630
+Time inference:  0.06571093294769526
+0020/000688
+Time inference:  0.06485119182616472
