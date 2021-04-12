@@ -18,7 +18,7 @@ Week 3
 - task_d/train-faster-kittimots.py: Train and evaluate Faster R-CNN on kittimots dataset
 - task_d/train-faster-mots.py: Train and evaluate Faster R-CNN on MotsChallenge dataset
 - task_d/train-retina-kittimots.py: Train and evaluate RetinaNet on kittimots dataset
-- task_d/train-retina-mots.py:Train and evaluate RetinaNet R-CNN on MotsChallenge dataset
+- task_d/train-retina-mots.py: Train and evaluate RetinaNet R-CNN on MotsChallenge dataset
 - task_d/process_dataset_mix.py: Create a mixed dataset with KittiMots and MotsChallenge 
 - task_d/train_faster_mix.py: Train and validate Faster R-CNN with our mixed dataset.
 - task_d/train-retina-mix.py: Train and validate RetinaNet with our mixed dataset.
@@ -26,6 +26,12 @@ Week 3
 
 [Week 3 GoogleSlides](https://docs.google.com/presentation/d/1Ty_v3sNSni04wZqKECGhFyjLhow89W6RBIg4NojFJrk/edit?usp=sharing)
 
+Week 4
+- evaluate-kitti-mots.py: Obtain quantitative results of Faster R-CNN and RetinaNet with pre-trained configuration.
+- process_dataset_kittimots.py: Adapted previous to this week
+- process_dataset_kittimots_to_coco.py: Jitti-mots adapted to coco
+
+[Week 4 GoogleSlides](https://docs.google.com/presentation/d/1FpmNIHTIu5k4BsPkAnuK0XRaglrQyJhQPXXwS9d6ynY/edit?usp=sharing)
 
 Group 08:
 
