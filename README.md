@@ -33,6 +33,13 @@ Week 4
 
 [Week 4 GoogleSlides](https://docs.google.com/presentation/d/1FpmNIHTIu5k4BsPkAnuK0XRaglrQyJhQPXXwS9d6ynY/edit?usp=sharing)
 
+
+Week 5
+
+- task_d/FeatureInterference.py: Create and evaluate different feature interference using COCO dataset.
+
+[Week 5 GoogleSlides](https://docs.google.com/presentation/d/11NOSljDyn5mohbhbMx28msi2mml3QyQIZiAQHA_QsPs/edit?usp=sharing)
+
 Group 08:
 
 ## Contact
