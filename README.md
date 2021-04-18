@@ -53,3 +53,5 @@ Please feel free to contact us with any questions, suggestions or comments:
 
 ## Overleaf Report:
 Here you can find the report with the reults of all this experiments [Overleaf link](https://es.overleaf.com/read/ggbnhqffgdkx).
+
+For a brief version with the most important parts check this link [Overleaf short link](https://www.overleaf.com/project/603d33d5adb746547b8a3d23).
