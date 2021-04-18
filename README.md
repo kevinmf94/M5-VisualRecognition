@@ -36,6 +36,7 @@ Week 4
 
 Week 5
 
+- task_c/inference_ball.py: script to get the qualitative results of the selected image.
 - task_d/FeatureInterference.py: Create and evaluate different feature interference using COCO dataset.
 
 [Week 5 GoogleSlides](https://docs.google.com/presentation/d/11NOSljDyn5mohbhbMx28msi2mml3QyQIZiAQHA_QsPs/edit?usp=sharing)
